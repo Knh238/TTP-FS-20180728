@@ -41,7 +41,7 @@ class Main extends React.Component {
           position="fixed"
           style={{
             // background: 'linear-gradient(45deg, #98FB98 30%, #87CEFA 90%)'
-            background: "cadetBlue"
+            background: "yellow"
           }}
         >
           <Toolbar disableGutters={!open} height={"20%"}>

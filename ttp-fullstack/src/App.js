@@ -29,13 +29,15 @@
 import React from "react";
 // import Navbar from "./components/Navbar";
 import Main from "./client/Main";
+import SearchBar from "./client/SearchBar";
 
 import Routes from "./routes";
 
 const App = () => {
   return (
     <div>
-      <Main />
+      {/* <Main /> */}
+      <SearchBar />
       <Routes />
     </div>
   );

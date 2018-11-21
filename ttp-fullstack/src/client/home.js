@@ -35,19 +35,24 @@ class Home extends React.Component {
       >
         {" "}
         <Typography variant="display3" align="center">
-          Books
+          $Stocks$
         </Typography>
         <CardMedia
           component="img"
           height="50%"
-          image="/bluesplotches.jpg"
-          title="Contemplative Reptile"
+          image="https://cdn163.picsart.com/223256630016202.jpg?c480x480"
+          title="home"
           fullwidth="true"
         />
+        {/* <img     <CardMedia
+          component="img"
+          height="50%"
+          image="../public/dancer.jpg"
+          title="home"
+          fullwidth="true"
+        /> */}
         <CardContent>
-          <Typography variant="display3">
-            Because girl, your kindle is ON FI-YA!
-          </Typography>
+          <Typography variant="display3">&stuff</Typography>
         </CardContent>
       </Card>
     );

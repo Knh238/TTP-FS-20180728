@@ -9,6 +9,12 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+// var d3 = require("d3"),
+//     jsdom = require("jsdom");
+
+// var document = jsdom.jsdom(),
+//     svg = d3.select(document.body).append("svg");
+//     import * as d3 from "d3";
 
 const styles = {
   card: {

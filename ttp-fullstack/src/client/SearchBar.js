@@ -164,7 +164,7 @@ class SearchBar extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="static" style={{ background: "#26C6DA" }}>
           <Toolbar>
             <IconButton
               className={classes.menuButton}
@@ -179,7 +179,7 @@ class SearchBar extends React.Component {
               color="inherit"
               noWrap
             >
-              Material-UI
+              Tech Talent Pipeline: Fullstack App
             </Typography>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
@@ -236,5 +236,5 @@ SearchBar.propTypes = {
   classes: PropTypes.object.isRequired
 };
 
-//export default withStyles(styles)(SearchBar);
-export default connect(SearchBar);
+export default withStyles(styles)(SearchBar);
+// export default SearchBar);

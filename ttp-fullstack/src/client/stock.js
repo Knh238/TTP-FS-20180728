@@ -40,12 +40,12 @@ class Stock extends React.Component {
         <CardMedia
           component="img"
           height="50%"
-          image="/public/cloud.jpg"
-          title="Contemplative Reptile"
+          image="https://cdn141.picsart.com/271471483023201.png?c480x480"
+          title="cat money"
           fullwidth="true"
         />
         <CardContent>
-          <Typography variant="display3">stocks stocks things</Typography>
+          <Typography variant="display3">Your financial advisor</Typography>
         </CardContent>
       </Card>
     );
