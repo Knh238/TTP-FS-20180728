@@ -91,8 +91,8 @@ class Main extends React.Component {
     );
   }
 }
-// Main.propTypes = {
-//   classes: PropTypes.object.isRequired,
-//   theme: PropTypes.object.isRequired
-// }
+Main.propTypes = {
+  classes: PropTypes.object.isRequired,
+  theme: PropTypes.object.isRequired
+};
 export default Main;
