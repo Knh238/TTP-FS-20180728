@@ -53,3 +53,10 @@ class Stock extends React.Component {
 }
 
 export default connect()(Stock);
+
+// var d3 = require("d3"),
+//     jsdom = require("jsdom");
+
+// var document = jsdom.jsdom(),
+//     svg = d3.select(document.body).append("svg");
+//     import * as d3 from "d3";

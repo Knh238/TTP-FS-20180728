@@ -1,6 +1,6 @@
 import axios from "axios";
 import history from "../history";
-var config = require("../../secrets");
+// var config = require("../../secrets");
 // const request = require('request')
 // const convert = require('xml-js')
 
@@ -13,7 +13,7 @@ const GOT_CURRENT_STOCK = "GOT_CURRENT_STOCK";
 // const ADDED_DATES = 'ADDED_DATES'
 
 const gotStockList = list => ({
-  type: GOT_USER_LIST,
+  type: GOT_STOCK_LIST,
   list
 });
 const gotCurrentStock = stock => ({
@@ -30,7 +30,7 @@ const gotCurrentStock = stock => ({
 // })
 
 export const getStock = id => dispatch => {
-  request.get(
+  axios.get(
     `https://www.goodreads.com/series/show?key=0PwPMvqFRKns4bpgBnkRg&id=${id}.xml`,
     (err, res, body) => {
       if (err) {
@@ -47,7 +47,7 @@ export const getStock = id => dispatch => {
 };
 
 export const getStockList = id => dispatch => {
-  request.get(
+  axios.get(
     `https://www.goodreads.com/review/list/${id}.xml?shelf=demo&key=0PwPMvqFRKns4bpgBnkRg&v=2?`,
     (err, res, body) => {
       if (err) {
@@ -63,41 +63,38 @@ export const getStockList = id => dispatch => {
   );
 };
 
-// const initialState = {
-//   books: [],
-//   userList: [],
-//   currentSeries: [],
-//   quotes: [],
-//   dates: []
-// }
+const initialState = {
+  stock: [],
+  stockList: []
+};
 
-// const booksReducer = (state = initialState, action) => {
-//   switch (action.type) {
-//     case GOT_USER_LIST:
-//       return {...state, userList: action.list}
-//     case GOT_CURRENT_SERIES:
-//       return {
-//         ...state,
-//         currentSeries: [...state.currentSeries, action.series]
-//       }
-//     case GOT_QUOTES:
-//       return {
-//         ...state,
-//         quotes: action.quotes
-//       }
-//     case GOT_DATES:
-//       return {
-//         ...state,
-//         dates: action.dates
-//       }
-//     case ADDED_DATES:
-//       return {
-//         ...state,
-//         dates: [...state.dates, action.dates]
-//       }
-//     default:
-//       return state
-//   }
-// }
+const stocksReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case GOT_STOCK_LIST:
+      return { ...state, stockList: action.list };
+    case GOT_CURRENT_STOCK:
+      return {
+        ...state,
+        currentStock: [...state.currentStock, action.stock]
+      };
+    //     case GOT_QUOTES:
+    //       return {
+    //         ...state,
+    //         quotes: action.quotes
+    //       }
+    //     case GOT_DATES:
+    //       return {
+    //         ...state,
+    //         dates: action.dates
+    //       }
+    //     case ADDED_DATES:
+    //       return {
+    //         ...state,
+    //         dates: [...state.dates, action.dates]
+    //   }
+    default:
+      return state;
+  }
+};
 
-// export default booksReducer
+export default stocksReducer;
