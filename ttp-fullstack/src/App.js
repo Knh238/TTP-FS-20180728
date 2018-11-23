@@ -30,14 +30,15 @@ import React from "react";
 // import Navbar from "./components/Navbar";
 import Main from "./client/Main";
 import SearchBar from "./client/SearchBar";
-
+import ClippedDrawer from "./client/Drawer";
 import Routes from "./routes";
 
 const App = () => {
   return (
     <div>
       {/* <Main /> */}
-      <SearchBar />
+      {/* <SearchBar /> */}
+      <ClippedDrawer />
       <Routes />
     </div>
   );

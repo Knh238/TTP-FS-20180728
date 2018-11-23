@@ -30,37 +30,31 @@ const gotCurrentStock = stock => ({
 // })
 
 export const getStock = id => dispatch => {
-  axios.get(
-    `https://www.goodreads.com/series/show?key=0PwPMvqFRKns4bpgBnkRg&id=${id}.xml`,
-    (err, res, body) => {
-      if (err) {
-        return console.log(err);
-      }
-
-      console.log(body.url);
-      console.log(body.explanation);
-      const stock = res.body;
-      console.log(stock);
-      dispatch(gotCurrentStock(stock));
+  axios.get((err, res, body) => {
+    if (err) {
+      return console.log(err);
     }
-  );
+
+    console.log(body.url);
+    console.log(body.explanation);
+    const stock = res.body;
+    console.log(stock);
+    dispatch(gotCurrentStock(stock));
+  });
 };
 
 export const getStockList = id => dispatch => {
-  axios.get(
-    `https://www.goodreads.com/review/list/${id}.xml?shelf=demo&key=0PwPMvqFRKns4bpgBnkRg&v=2?`,
-    (err, res, body) => {
-      if (err) {
-        return console.log(err);
-      }
-      console.log(body.url);
-      console.log(body.explanation);
-      const list = res.list;
-
-      dispatch(gotStockList(list));
-      // return result1
+  axios.get((err, res, body) => {
+    if (err) {
+      return console.log(err);
     }
-  );
+    console.log(body.url);
+    console.log(body.explanation);
+    const list = res.list;
+
+    dispatch(gotStockList(list));
+    // return result1
+  });
 };
 
 const initialState = {
