@@ -10,7 +10,9 @@ import {
   Stock,
   Portfolio,
   PopularStocks,
-  Calculator
+  Calculator,
+  LoginForm,
+  SignUpForm
 } from "./client";
 // import // Login,
 // // Signup,
@@ -35,6 +37,8 @@ export default class Routes extends Component {
         <Route exact path="/popularStocks" component={PopularStocks} />
         <Route exact path="/calculator" component={Calculator} />
         <Route exact path="/portfolio" component={Portfolio} />
+        <Route exact path="/login" component={LoginForm} />
+        <Route exact path="/signup" component={SignUpForm} />
       </Switch>
     );
   }

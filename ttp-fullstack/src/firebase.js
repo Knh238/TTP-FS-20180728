@@ -1,5 +1,5 @@
 var firebase = require("firebase");
-const config = require("./secret");
+const config = require("./secrets");
 
 firebase.initializeApp(config);
 

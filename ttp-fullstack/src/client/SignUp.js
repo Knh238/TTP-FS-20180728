@@ -31,12 +31,16 @@ export default class SignUpForm extends Component {
     const email = this.state.email;
     const pass = this.state.password;
     const displayName = this.state.name;
+    const portfolio = [];
+    const transactions = [];
+    const balance = 500000;
     // sign up the user
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, pass)
       .catch(function(error) {
         console.error(error);
+        window.alert(error);
       });
     //add user to db
     firebase.auth().onAuthStateChanged(function(user) {
@@ -49,7 +53,10 @@ export default class SignUpForm extends Component {
           .ref("users/" + uid)
           .set({
             displayName,
-            email
+            email,
+            portfolio,
+            transactions,
+            balance
           });
       }
     });

@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -20,9 +21,13 @@ import InputBase from "@material-ui/core/InputBase";
 // import MenuItem from "@material-ui/core/MenuItem";
 // import Menu from "@material-ui/core/Menu";
 import { fade } from "@material-ui/core/styles/colorManipulator";
+import Avatar from "@material-ui/core/Avatar";
+//import Tooltip from "@material-ui/core/Tooltip";
+import Icon from "@material-ui/core/Icon";
 // import { withStyles } from "@material-ui/core/styles";
 // import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
+import firebase from "../firebase";
 
 const drawerWidth = 240;
 
@@ -86,80 +91,165 @@ const styles = theme => ({
   }
 });
 
-function ClippedDrawer(props) {
-  const { classes } = props;
+class ClippedDrawer extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      // projects: [],
+      user: {},
+      login: null
+    };
+    this.logOut = this.logOut.bind(this);
+    //this.clickNav = this.clickNav.bind(this);
+  }
 
-  return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <AppBar
-        position="fixed"
-        className={classes.appBar}
-        style={{ background: "#26C6DA" }}
-      >
-        <Toolbar>
-          {/* <div> */}
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
+  componentDidMount() {
+    const self = this;
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        self.setState({ user });
+        // const ref = firebase.database().ref("projects");
+        // ref.on("value", function(snapshot) {
+        //   let userProjects = [];
+        //   const projects = snapshot.val();
+        //   for (let key in projects) {
+        //     if (projects[key].members) {
+        //       const members = projects[key].members;
+        //       const name = projects[key].name;
+        //       const color = projects[key].color;
+        //       if (members.includes(user.email)) {
+        //         userProjects.push({ name, key, color });
+        //       }
+        //     }
+        //   }
+        //   self.setState({ projects: userProjects });
+        // });
+      }
+    });
+  }
+  // clickNav(key) {
+  //   //this.props.setProject(key)
+  // }
+
+  logOut() {
+    firebase
+      .auth()
+      .signOut()
+      .then(
+        function() {
+          console.log("Sign out!");
+          console.log(firebase.auth().currentUser);
+        },
+        function(error) {
+          console.error(error);
+        }
+      );
+    this.setState({
+      user: {}
+    });
+    this.props.handleLogout();
+  }
+
+  render() {
+    const { classes } = this.props;
+    const { user, projects } = this.state;
+    return (
+      <div className={classes.root}>
+        <CssBaseline />
+        <AppBar
+          position="fixed"
+          className={classes.appBar}
+          style={{ background: "#26C6DA" }}
+        >
+          <Toolbar>
+            {/* <div> */}
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput
+                }}
+              />
             </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput
-              }}
-            />
-          </div>
-          <div>
-            {/* <div className={classes.grow} /> */}
-            <Typography
-              // className={classes.title}
-              style={{ flex: "end" }}
-              variant="h6"
-              color="inherit"
-              noWrap
-            >
-              Tech Talent Pipeline: Fullstack App
-            </Typography>
-          </div>
-          {/* </div> */}
-        </Toolbar>
-      </AppBar>
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        classes={{
-          paper: classes.drawerPaper
-        }}
-      >
-        <div className={classes.toolbar} />
-        <List>
-          {["Hot Stocks", "Buy Low", "Sell High", "Calculator"].map(
-            (text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
+            <div>
+              {/* <div className={classes.grow} /> */}
+              <Typography
+                // className={classes.title}
+                style={{ flex: "end" }}
+                variant="h6"
+                color="inherit"
+                noWrap
+              >
+                Tech Talent Pipeline: Fullstack App
+              </Typography>
+            </div>
+            {/* </div> */}
+          </Toolbar>
+        </AppBar>
+        <Drawer
+          className={classes.drawer}
+          variant="permanent"
+          classes={{
+            paper: classes.drawerPaper
+          }}
+        >
+          <div className={classes.toolbar} />
+          <List>
+            {["Hot Stocks", "Buy Low", "Sell High", "Calculator"].map(
+              (text, index) => (
+                <ListItem button key={text}>
+                  <ListItemIcon>
+                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              )
+            )}
+          </List>
+          <Divider />
+          <List>
+            {["My Profile", "My Portfolio", "Transactions"].map(
+              (text, index) => (
+                <ListItem button key={text}>
+                  <ListItemIcon>
+                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  </ListItemIcon>
+                  <ListItemText primary={text} />
+                </ListItem>
+              )
+            )}
+            {user.uid ? (
+              <ListItem>
+                {/* <Tooltip
+                  classes={{ tooltip: classes.popup }}
+                  title="Logout"
+                  placement="left-start"
+                > */}
+                <Link to="/" replace>
+                  <Avatar
+                    style={{
+                      width: "30px",
+                      height: "30px",
+                      backgroundColor: "white",
+                      color: "grey"
+                    }}
+                    onClick={this.logOut}
+                  >
+                    <Icon>logout</Icon>
+                  </Avatar>
+                </Link>
+                {/* </Tooltip> */}
               </ListItem>
-            )
-          )}
-        </List>
-        <Divider />
-        <List>
-          {["My Profile", "My Portfolio", "Transactions"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-    </div>
-  );
+            ) : null}
+          </List>
+        </Drawer>
+      </div>
+    );
+  }
 }
 
 ClippedDrawer.propTypes = {
