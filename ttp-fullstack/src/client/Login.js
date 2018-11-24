@@ -35,6 +35,7 @@ export default class LoginForm extends Component {
         .signInWithEmailAndPassword(email, pass)
         .catch(function(error) {
           console.error(error);
+          window.alert(error);
         });
     }
     const user = firebase.auth().currentUser;

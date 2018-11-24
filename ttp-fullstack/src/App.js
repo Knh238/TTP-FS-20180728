@@ -33,15 +33,52 @@ import SearchBar from "./client/SearchBar";
 import ClippedDrawer from "./client/Drawer";
 import Routes from "./routes";
 
-const App = () => {
-  return (
-    <div>
-      {/* <Main /> */}
-      {/* <SearchBar /> */}
-      <ClippedDrawer />
-      <Routes />
-    </div>
-  );
-};
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      user: {},
+      login: false
+      //key: null
+    };
+    this.handleLogin = this.handleLogin.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
+    //this.setProject = this.setProject.bind(this);
+  }
+
+  handleLogin(user) {
+    this.setState({
+      user: user,
+      login: true
+    });
+  }
+
+  handleLogout() {
+    this.setState({
+      user: {},
+      login: false
+    });
+  }
+
+  // setProject(key) {
+  //   this.setState({ key });
+  // }
+  //const App = () => {
+  render() {
+    return (
+      <div>
+        {/* <Main /> */}
+        {/* <SearchBar /> */}
+        <ClippedDrawer
+          handleLogout={this.handleLogout}
+          handleLogin={this.handleLogin}
+        />
+        {/* setProject={this.setProject}/> */}
+        <Routes andleLogin={this.handleLogin} />
+        {/* projectKey={this.state.key} */}
+      </div>
+    );
+  }
+}
 
 export default App;
