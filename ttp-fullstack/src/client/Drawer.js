@@ -209,19 +209,70 @@ class ClippedDrawer extends React.Component {
                 </ListItem>
               )
             )}
+            <Link to="/popularStocks" replace>
+              {" "}
+              <ListItem button key={"my profile"} title="profile">
+                {/* // <ListItemIcon>
+                    
+                  // </ListItemIcon> */}
+                <ListItemText primary={"Hot Stocks"} />
+              </ListItem>
+            </Link>
+            <Link to="/profile" replace>
+              {" "}
+              <ListItem button key={"my profile"} title="profile">
+                {/* // <ListItemIcon>
+                    
+                  // </ListItemIcon> */}
+                <ListItemText primary={"Buy low"} />
+              </ListItem>
+            </Link>
+            <Link to="/profile" replace>
+              {" "}
+              <ListItem button key={"my profile"} title="profile">
+                {/* // <ListItemIcon>
+                    
+                  // </ListItemIcon> */}
+                <ListItemText primary={"sell high "} />
+              </ListItem>
+            </Link>
           </List>
           <Divider />
           <List>
-            {["My Profile", "My Portfolio", "Transactions"].map(
-              (text, index) => (
-                <ListItem button key={text}>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItem>
-              )
-            )}
+            {/* {["My Profile", "My Portfolio", "Transactions"].map( */}
+            <Link to="/profile" replace>
+              {" "}
+              <ListItem button key={"my profile"} title="profile">
+                {/* // <ListItemIcon>
+                    
+                  // </ListItemIcon> */}
+                <ListItemText primary={"Profile"} />
+              </ListItem>
+            </Link>
+            <Link to="/stock" replace>
+              <ListItem button key={"Account Summary"} title="AccountSummary">
+                {/* // <ListItemIcon>
+                // </ListItemIcon> */}
+                <ListItemText primary={"Account Summary"} />
+              </ListItem>
+            </Link>
+            <Link to="/portfolio" replace>
+              <ListItem button key={"portfolio"} title="portfolio">
+                {/* // <ListItemIcon>
+                 // </ListItemIcon> */}
+                {/* <Link to="/portfolio" replace> */}
+                <ListItemText primary={"Portfolio"} />
+              </ListItem>
+            </Link>
+
+            <Link to="/stock" replace>
+              <ListItem button key={"Transactions"} title="profile">
+                {/* // <ListItemIcon>
+                // </ListItemIcon> */}
+                <ListItemText primary={"Transactions"} />
+              </ListItem>
+            </Link>
+
             {user.uid ? (
               <ListItem>
                 {/* <Tooltip

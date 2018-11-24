@@ -40,14 +40,12 @@ class Calculator extends React.Component {
         <CardMedia
           component="img"
           height="50%"
-          image="/public/cloud.jpg"
+          image="https://cdn130.picsart.com/273322670015201.jpg?c480x480"
           title="Contemplative Reptile"
           fullwidth="true"
         />
         <CardContent>
-          <Typography variant="display3">
-            Because girl, your kindle is ON FI-YA!
-          </Typography>
+          <Typography variant="display3">are you ready for it?</Typography>
         </CardContent>
       </Card>
     );

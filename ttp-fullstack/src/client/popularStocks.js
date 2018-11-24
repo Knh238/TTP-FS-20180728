@@ -30,7 +30,8 @@ class PopularStocks extends React.Component {
           float: "none",
           width: "55%",
           marginLeft: "auto",
-          marginRight: "auto"
+          marginRight: "auto",
+          paddingTop: 10
         }}
       >
         {" "}
@@ -38,15 +39,16 @@ class PopularStocks extends React.Component {
           PopularStocks
         </Typography>
         <CardMedia
+          style={{ display: "flex" }}
           component="img"
-          height="50%"
-          image="/public/cloud.jpg"
-          title="Contemplative Reptile"
-          fullwidth="true"
+          // height="40%"
+          image="https://cdn140.picsart.com/279049216003201.jpg?c480x480"
+          title="flames"
+          // fullwidth="true"
         />
         <CardContent>
           <Typography variant="display3">
-            Because girl, your kindle is ON FI-YA!
+            Because girl, your stock is ON FI-YA!
           </Typography>
         </CardContent>
       </Card>
