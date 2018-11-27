@@ -14,9 +14,10 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
-//import IconButton from "@material-ui/core/IconButton";
+import IconButton from "@material-ui/core/IconButton";
 // import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
+import Button from "@material-ui/core/Button";
 //import Badge from "@material-ui/core/Badge";
 // import MenuItem from "@material-ui/core/MenuItem";
 // import Menu from "@material-ui/core/Menu";
@@ -97,9 +98,11 @@ class ClippedDrawer extends React.Component {
     this.state = {
       // projects: [],
       user: {},
-      login: null
+      login: null,
+      searchStock: ""
     };
     this.logOut = this.logOut.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
     //this.clickNav = this.clickNav.bind(this);
   }
 
@@ -130,6 +133,9 @@ class ClippedDrawer extends React.Component {
   // clickNav(key) {
   //   //this.props.setProject(key)
   // }
+  handleSubmit() {
+    const self = this;
+  }
 
   logOut() {
     firebase
@@ -162,32 +168,40 @@ class ClippedDrawer extends React.Component {
           style={{ background: "#26C6DA" }}
         >
           <Toolbar>
-            {/* <div> */}
             <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
               <InputBase
                 placeholder="Search…"
                 classes={{
                   root: classes.inputRoot,
                   input: classes.inputInput
                 }}
+                onChange={event =>
+                  this.setState({ searchStock: event.target.value })
+                }
+                value={this.state.searchStock}
               />
             </div>
-            <div>
+
+            <IconButton component={Link} to="/buy">
+              <SearchIcon
+                onClick={() =>
+                  console.log("state search stock is", this.state.searchStock)
+                }
+              />
+            </IconButton>
+
+            <div style={{ marginLeft: "20%" }}>
               {/* <div className={classes.grow} /> */}
               <Typography
                 // className={classes.title}
-                style={{ flex: "end" }}
-                variant="h6"
+                style={{ flex: "center" }}
+                variant="h5"
                 color="inherit"
                 noWrap
               >
                 Tech Talent Pipeline: Fullstack App
               </Typography>
             </div>
-            {/* </div> */}
           </Toolbar>
         </AppBar>
         <Drawer
@@ -199,79 +213,93 @@ class ClippedDrawer extends React.Component {
         >
           <div className={classes.toolbar} />
           <List>
-            {["Hot Stocks", "Buy Low", "Sell High", "Calculator"].map(
-              (text, index) => (
-                <ListItem button key={text}>
-                  <ListItemIcon>
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                  </ListItemIcon>
-                  <ListItemText primary={text} />
-                </ListItem>
-              )
-            )}
-            <Link to="/popularStocks" replace>
-              {" "}
-              <ListItem button key={"my profile"} title="profile">
-                {/* // <ListItemIcon>
+            {/* <Link to="/buy" replace> */}
+            <ListItem button key={"Buy"} component={Link} to="/buy">
+              <ListItemIcon>
+                <InboxIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Buy"} />
+            </ListItem>
+
+            <ListItem
+              button
+              key={"my profile"}
+              title="profile"
+              component={Link}
+              to="/popularStocks"
+            >
+              {/* // <ListItemIcon>
                     
                   // </ListItemIcon> */}
-                <ListItemText primary={"Hot Stocks"} />
-              </ListItem>
-            </Link>
-            <Link to="/profile" replace>
-              {" "}
-              <ListItem button key={"my profile"} title="profile">
-                {/* // <ListItemIcon>
+              <ListItemText primary={"Hot Stocks"} />
+            </ListItem>
+
+            <ListItem
+              button
+              key={"my profile"}
+              title="profile"
+              component={Link}
+              to="/stock"
+            >
+              {/* // <ListItemIcon>
                     
                   // </ListItemIcon> */}
-                <ListItemText primary={"Buy low"} />
-              </ListItem>
-            </Link>
-            <Link to="/profile" replace>
-              {" "}
-              <ListItem button key={"my profile"} title="profile">
-                {/* // <ListItemIcon>
-                    
-                  // </ListItemIcon> */}
-                <ListItemText primary={"sell high "} />
-              </ListItem>
-            </Link>
+              <ListItemText primary={"indiv stock"} />
+            </ListItem>
           </List>
           <Divider />
           <List>
-            {/* {["My Profile", "My Portfolio", "Transactions"].map( */}
-            <Link to="/profile" replace>
-              {" "}
-              <ListItem button key={"my profile"} title="profile">
-                {/* // <ListItemIcon>
+            <ListItem
+              button
+              key={"my profile"}
+              title="profile"
+              component={Link}
+              // to="/profile"
+              to="/stockCat"
+            >
+              {/* // <ListItemIcon>
                     
                   // </ListItemIcon> */}
-                <ListItemText primary={"Profile"} />
-              </ListItem>
-            </Link>
-            <Link to="/stock" replace>
-              <ListItem button key={"Account Summary"} title="AccountSummary">
-                {/* // <ListItemIcon>
-                // </ListItemIcon> */}
-                <ListItemText primary={"Account Summary"} />
-              </ListItem>
-            </Link>
-            <Link to="/portfolio" replace>
-              <ListItem button key={"portfolio"} title="portfolio">
-                {/* // <ListItemIcon>
-                 // </ListItemIcon> */}
-                {/* <Link to="/portfolio" replace> */}
-                <ListItemText primary={"Portfolio"} />
-              </ListItem>
-            </Link>
+              <ListItemText primary={"Profile"} />
+            </ListItem>
 
-            <Link to="/stock" replace>
-              <ListItem button key={"Transactions"} title="profile">
-                {/* // <ListItemIcon>
+            <ListItem
+              button
+              key={"Account Summary"}
+              title="AccountSummary"
+              component={Link}
+              to="/barChart"
+              //eventually account summary
+            >
+              {/* // <ListItemIcon>
                 // </ListItemIcon> */}
-                <ListItemText primary={"Transactions"} />
-              </ListItem>
-            </Link>
+              <ListItemText primary={"Account Summary"} />
+            </ListItem>
+
+            <ListItem
+              button
+              key={"portfolio"}
+              title="portfolio"
+              component={Link}
+              to="/portfolio"
+            >
+              {/* // <ListItemIcon>
+                 // </ListItemIcon> */}
+
+              <ListItemText primary={"Portfolio"} />
+            </ListItem>
+
+            <ListItem
+              button
+              key={"Transactions"}
+              title="profile"
+              component={Link}
+              to="/transactions"
+            >
+              {/* // <ListItemIcon>
+                // </ListItemIcon> */}
+              <ListItemText primary={"Transactions"} />
+            </ListItem>
 
             {user.uid ? (
               <ListItem>

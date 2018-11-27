@@ -168,7 +168,7 @@ class Portfolio extends React.Component {
             })}
           </TableBody>
         </Table>
-        <Typography variant="h5">
+        <Typography variant="h4" style={{ color: "red", marginLeft: 20 }}>
           <p>notes for next steps:</p>
           <p>
             <p>1.on click sell would </p>
