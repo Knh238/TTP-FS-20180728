@@ -27,25 +27,27 @@ const styles = {
 };
 
 class Stock extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {};
   }
   async componentWillMount() {
     // return async dispatch => {
+    const symbol = this.props.location.state;
+    //GET /stock/{symbol}/batch
     try {
       const { data } = await axios.get(
-        "https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb,tsla&types=quote,news,chart&range=1m&last=5"
+        `https://api.iextrading.com/1.0/stock/${symbol}/batch?types=quote,news,chart&range=1m&last=1`
       );
       console.log("data", data);
-      this.setState(data.AAPL);
+      this.setState(data);
     } catch (err) {
       console.error(err);
     }
   }
 
   render() {
-    console.log("----------this state", this.state);
+    console.log("----------this state", this.props.location.state);
 
     return (
       <div>
@@ -61,13 +63,13 @@ class Stock extends React.Component {
           <Typography variant="display3" align="center">
             Stock Info
           </Typography>
-          <CardMedia
+          {/* <CardMedia
             component="img"
             height="20%"
             image="https://cdn141.picsart.com/271471483023201.png?c480x480"
             title="cat money"
             fullwidth="true"
-          />
+          /> */}
           {/* {this.state.quote ? (
             <CardContent>
               <Typography variant="display3">
@@ -88,27 +90,41 @@ class Stock extends React.Component {
         {this.state.quote ? (
           <Paper
             style={{
-              marginLeft: "5%",
-              backgroundColor: "white"
+              marginLeft: "15%",
+              backgroundColor: "white",
+              width: "65%"
             }}
           >
-            <Card style={{ backgroundColor: "#BBDEFB" }}>
+            <Card style={{ backgroundColor: "#29B6F6" }}>
               <Typography variant="display3" align="center">
-                {this.state.quote.symbol}
                 {this.state.quote.companyName}
+              </Typography>
+              <Typography variant="display2" align="center">
+                Symbol: {this.state.quote.symbol}
               </Typography>
             </Card>
             <Card style={{ backgroundColor: "#E8EAF6" }}>
+              {this.state.quote.change > 0 ? (
+                <Typography
+                  style={{ color: "green" }}
+                  variant="display3"
+                  align="center"
+                >
+                  {this.state.quote.change}
+                </Typography>
+              ) : (
+                <Typography
+                  style={{ color: "red" }}
+                  variant="display3"
+                  align="center"
+                >
+                  {this.state.quote.change}
+                </Typography>
+              )}
+              }
               <Typography
                 style={{ color: "black" }}
-                variant="display3"
-                align="center"
-              >
-                change: {this.state.quote.change}
-              </Typography>
-              <Typography
-                style={{ color: "black" }}
-                variant="display3"
+                variant="display2"
                 align="center"
               >
                 {"\n"}%{this.state.quote.changePercent}

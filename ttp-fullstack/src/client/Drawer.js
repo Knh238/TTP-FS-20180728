@@ -13,7 +13,13 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import InsertChart from "@material-ui/icons/InsertChart";
+import HomeIcon from "@material-ui/icons/Home";
+import ReceiptIcon from "@material-ui/icons/Receipt";
+import ShowChartIcon from "@material-ui/icons/ShowChart";
+import ForumIcon from "@material-ui/icons/Forum";
+import WorkIcon from "@material-ui/icons/Work";
+import AccountIcon from "@material-ui/icons/AccountCircle";
 import IconButton from "@material-ui/core/IconButton";
 // import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
@@ -135,6 +141,8 @@ class ClippedDrawer extends React.Component {
   // }
   handleSubmit() {
     const self = this;
+    // const stock = this.state.eventName;
+    self.setState({ searchSock: "" });
   }
 
   logOut() {
@@ -182,7 +190,14 @@ class ClippedDrawer extends React.Component {
               />
             </div>
 
-            <IconButton component={Link} to="/buy">
+            <IconButton
+              component={Link}
+              //to="/Stock"
+              to={{
+                pathname: "/Stock",
+                state: this.state.searchStock
+              }}
+            >
               <SearchIcon
                 onClick={() =>
                   console.log("state search stock is", this.state.searchStock)
@@ -213,7 +228,12 @@ class ClippedDrawer extends React.Component {
         >
           <div className={classes.toolbar} />
           <List>
-            {/* <Link to="/buy" replace> */}
+            <ListItem button key={"Home"} component={Link} to="/">
+              <ListItemIcon>
+                <HomeIcon />
+              </ListItemIcon>
+              <ListItemText primary={"Buy"} />
+            </ListItem>
             <ListItem button key={"Buy"} component={Link} to="/buy">
               <ListItemIcon>
                 <InboxIcon />
@@ -228,9 +248,9 @@ class ClippedDrawer extends React.Component {
               component={Link}
               to="/popularStocks"
             >
-              {/* // <ListItemIcon>
-                    
-                  // </ListItemIcon> */}
+              <ListItemIcon>
+                <ForumIcon />
+              </ListItemIcon>
               <ListItemText primary={"Hot Stocks"} />
             </ListItem>
 
@@ -241,9 +261,9 @@ class ClippedDrawer extends React.Component {
               component={Link}
               to="/stock"
             >
-              {/* // <ListItemIcon>
-                    
-                  // </ListItemIcon> */}
+              <ListItemIcon>
+                <AccountIcon />
+              </ListItemIcon>
               <ListItemText primary={"indiv stock"} />
             </ListItem>
           </List>
@@ -257,9 +277,9 @@ class ClippedDrawer extends React.Component {
               // to="/profile"
               to="/stockCat"
             >
-              {/* // <ListItemIcon>
-                    
-                  // </ListItemIcon> */}
+              <ListItemIcon>
+                <AccountIcon />
+              </ListItemIcon>
               <ListItemText primary={"Profile"} />
             </ListItem>
 
@@ -271,8 +291,9 @@ class ClippedDrawer extends React.Component {
               to="/barChart"
               //eventually account summary
             >
-              {/* // <ListItemIcon>
-                // </ListItemIcon> */}
+              <ListItemIcon>
+                <InsertChart />
+              </ListItemIcon>
               <ListItemText primary={"Account Summary"} />
             </ListItem>
 
@@ -283,9 +304,9 @@ class ClippedDrawer extends React.Component {
               component={Link}
               to="/portfolio"
             >
-              {/* // <ListItemIcon>
-                 // </ListItemIcon> */}
-
+              <ListItemIcon>
+                <WorkIcon />
+              </ListItemIcon>
               <ListItemText primary={"Portfolio"} />
             </ListItem>
 
@@ -296,18 +317,14 @@ class ClippedDrawer extends React.Component {
               component={Link}
               to="/transactions"
             >
-              {/* // <ListItemIcon>
-                // </ListItemIcon> */}
+              <ListItemIcon>
+                <ReceiptIcon />
+              </ListItemIcon>
               <ListItemText primary={"Transactions"} />
             </ListItem>
 
             {user.uid ? (
               <ListItem>
-                {/* <Tooltip
-                  classes={{ tooltip: classes.popup }}
-                  title="Logout"
-                  placement="left-start"
-                > */}
                 <Link to="/" replace>
                   <Avatar
                     style={{
