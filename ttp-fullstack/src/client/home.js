@@ -27,65 +27,65 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        {/* <div
-          style={{
-            width: "25%",
-            postion: "relative"
-          }}
-        >
-          <Button variant="contained">Log in</Button>
-          <Button variant="contained">sign-up</Button>
-        </div> */}
+        <div>
+          <Card
+            style={{
+              width: "55%",
+              marginLeft: "auto",
+              marginRight: "auto",
+              marginBottom: 20,
+              backgroundColor: "#80DEEA"
+            }}
+          >
+            {" "}
+            <Typography variant="display4" align="center">
+              Welcome!
+            </Typography>
+            <Typography variant="display2" align="center">
+              You can search for stocks by symbol in search bar in upper
+              left-hand corner
+            </Typography>
+          </Card>
+        </div>
+        <div>
+          <Button
+            size="large"
+            variant="contained"
+            color="primary"
+            title="login"
+            style={{
+              marginLeft: "25%",
+              height: "50%",
+              width: "10%",
+              borderRadius: 5
+            }}
+          >
+            <Link to="/login">Log in</Link>
+          </Button>
+
+          <Button
+            variant="contained"
+            style={{ marginLeft: "30%", height: "30%", width: "10%" }}
+          >
+            <Link to="/signup">sign-up</Link>
+          </Button>
+        </div>
         <Card
           style={{
             width: "55%",
             marginLeft: "auto",
-            marginRight: "auto"
+            marginRight: "auto",
+            marginTop: 10
           }}
         >
-          {" "}
-          <Typography variant="display3" align="center">
-            $Stocks$
-          </Typography>
           <CardMedia
             component="img"
-            height="50%"
-            image="https://cdn163.picsart.com/223256630016202.jpg?c480x480"
+            height="30%"
+            //image="https://cdn163.picsart.com/223256630016202.jpg?c480x480"
+            image="https://cdn141.picsart.com/271471483023201.png?c480x480"
             title="home"
-            width="50%"
+            width="30%"
           />
-          <CardContent>
-            <Typography variant="display3">&stuff</Typography>
-          </CardContent>
-        </Card>
-        {/* <div
-          style={{
-            width: "25%",
-            postion: "relative"
-          }}
-        > */}
-        <Card
-          style={{
-            width: "55%",
-            marginLeft: "auto",
-            marginRight: "auto"
-          }}
-        >
-          <CardContent>
-            <Button
-              size="large"
-              variant="contained"
-              color="primary"
-              title="login"
-            >
-              <Link to="/login">Log in</Link>
-            </Button>
-
-            <Button size="large" variant="contained">
-              <Link to="/signup">sign-up</Link>
-            </Button>
-          </CardContent>
-          {/* </div> */}
         </Card>
       </div>
     );

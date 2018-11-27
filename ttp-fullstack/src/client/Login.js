@@ -45,40 +45,39 @@ export default class LoginForm extends Component {
   render() {
     return (
       <div style={{ position: "relative" }}>
-        <div
+        <Card
           style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, 50%)"
+            backgroundColor: "grey",
+            height: "40%",
+            width: "40%",
+            marginLeft: "20%",
+            marginTop: "10%"
           }}
         >
-          <Card>
-            <form onChange={this.handleChange}>
-              <FormGroup style={{ margin: "1em" }}>
-                <FormControl>
-                  <InputLabel>E-mail</InputLabel>
-                  <Input name="email" type="email" required />
-                </FormControl>
-                <FormControl>
-                  <InputLabel>Password</InputLabel>
-                  <Input name="password" type="password" required />
-                </FormControl>
-                <br />
-                <Button onClick={this.handleSubmit} type="submit">
-                  <Link to="/" replace>
-                    LOGIN
-                  </Link>
-                </Button>
-                <Button>
-                  <Link style={{ textDecoration: "none" }} to="/signup" replace>
-                    Sign up as a new user
-                  </Link>
-                </Button>
-              </FormGroup>
-            </form>
-          </Card>
-        </div>
+          <form onChange={this.handleChange}>
+            <FormGroup style={{ margin: "1em" }}>
+              <FormControl>
+                <InputLabel>E-mail</InputLabel>
+                <Input name="email" type="email" required />
+              </FormControl>
+              <FormControl>
+                <InputLabel>Password</InputLabel>
+                <Input name="password" type="password" required />
+              </FormControl>
+              <br />
+              <Button onClick={this.handleSubmit} type="submit">
+                <Link to="/" replace>
+                  LOGIN
+                </Link>
+              </Button>
+              <Button>
+                <Link style={{ textDecoration: "none" }} to="/signup" replace>
+                  Sign up as a new user
+                </Link>
+              </Button>
+            </FormGroup>
+          </form>
+        </Card>
       </div>
     );
   }

@@ -166,7 +166,7 @@ class ClippedDrawer extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { user, projects } = this.state;
+    const { user } = this.state;
     return (
       <div className={classes.root}>
         <CssBaseline />
@@ -189,10 +189,8 @@ class ClippedDrawer extends React.Component {
                 value={this.state.searchStock}
               />
             </div>
-
             <IconButton
               component={Link}
-              //to="/Stock"
               to={{
                 pathname: "/Stock",
                 state: this.state.searchStock
@@ -202,11 +200,9 @@ class ClippedDrawer extends React.Component {
             </IconButton>
 
             <div style={{ marginLeft: "20%" }}>
-              {/* <div className={classes.grow} /> */}
               <Typography
-                // className={classes.title}
                 style={{ flex: "center" }}
-                variant="h5"
+                variant="h4"
                 color="inherit"
                 noWrap
               >
@@ -228,13 +224,7 @@ class ClippedDrawer extends React.Component {
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
-              <ListItemText primary={"Buy"} />
-            </ListItem>
-            <ListItem button key={"Buy"} component={Link} to="/buy">
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Buy"} />
+              <ListItemText primary={"Home"} />
             </ListItem>
 
             <ListItem
@@ -248,19 +238,6 @@ class ClippedDrawer extends React.Component {
                 <ForumIcon />
               </ListItemIcon>
               <ListItemText primary={"Hot Stocks"} />
-            </ListItem>
-
-            <ListItem
-              button
-              key={"my profile"}
-              title="profile"
-              component={Link}
-              to="/stock"
-            >
-              <ListItemIcon>
-                <AccountIcon />
-              </ListItemIcon>
-              <ListItemText primary={"indiv stock"} />
             </ListItem>
           </List>
           <Divider />

@@ -17,12 +17,6 @@ import ContactMailOutlinedIcon from "@material-ui/icons/ContactMailOutlined";
 import ButtonBase from "@material-ui/core/ButtonBase";
 
 import Paper from "@material-ui/core/Paper";
-//font-family: 'Chakra Petch', sans-serif;
-// font-family: 'Bitter', serif;
-// font-family: 'Fahkwang', sans-serif;
-// import Navbar from './Navbar'
-
-// const styles = {
 
 class Main extends React.Component {
   state = {

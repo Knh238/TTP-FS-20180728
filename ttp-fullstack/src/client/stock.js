@@ -56,31 +56,6 @@ class Stock extends React.Component {
         >
           Stock Info
         </Typography>
-        {/* <Card
-          style={{
-            float: "none",
-            width: "20%",
-            height: "80%",
-            marginLeft: "auto",
-            marginRight: "auto"
-          }}
-        >
-          {" "}
-          <Typography
-            variant="display4"
-            style={{ backgroundColor: "#29B6F6" }}
-            align="center"
-          >
-            Stock Info
-          </Typography> */}
-        {/* <CardMedia
-            component="img"
-            height="20%"
-            image="https://cdn141.picsart.com/271471483023201.png?c480x480"
-            title="cat money"
-            fullwidth="true"
-          /> */}
-        {/* </Card> */}
 
         {this.state.quote ? (
           <Paper
@@ -174,7 +149,8 @@ class Stock extends React.Component {
                     pathname: "/Buy",
                     state: {
                       name: this.state.quote.companyName,
-                      cost: this.state.quote.latestPrice
+                      cost: this.state.quote.latestPrice,
+                      symbol: this.state.quote.symbol
                     }
                   }}
                 >

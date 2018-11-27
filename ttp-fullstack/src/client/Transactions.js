@@ -15,42 +15,8 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
-// var d3 = require("d3"),
-//     jsdom = require("jsdom");
+import firebase from "../firebase";
 
-// var document = jsdom.jsdom(),
-//     svg = d3.select(document.body).append("svg");
-//     import * as d3 from "d3";
-
-// const styles = {
-//   card: {
-//     maxWidth: 345,
-//     display: "flex",
-//     flexWrap: "wrap",
-//     justifyContent: "space-around"
-//   },
-//   media: {
-//     objectFit: "cover"
-//   },
-//   root: {
-//     width: "100%",
-//     marginTop: theme.spacing.unit * 3,
-//     overflowX: "auto"
-//   },
-//   table: {
-//     minWidth: 700
-//   }
-// };
-// const styles = theme => ({
-//   root: {
-//     width: "100%",
-//     marginTop: theme.spacing.unit * 3,
-//     overflowX: "auto"
-//   },
-//   table: {
-//     minWidth: 700
-//   }
-// });
 let id = 0;
 function createData(
   name,
@@ -74,47 +40,36 @@ function createData(
 class TransactionList extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = { transactions: [] };
+  }
+  async componentWillMount() {
+    const self = this;
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        const currUser = user.uid;
+        var ref = firebase
+          .database()
+          .ref(`users/${currUser}/portfolio/transactionHistory`);
+        ref.on("value", function(snapshot) {
+          let currPortfolio = snapshot.val();
+          const holdings = [];
+          for (let key in currPortfolio) {
+            holdings.push(currPortfolio[key]);
+          }
+          self.setState({
+            transactions: holdings
+          });
+        });
+      }
+    });
   }
 
   render() {
-    const rows = [
-      createData("stock 1", 159, 6.0, 25, 24, 4.0),
-      createData("stock 2", 237, 9.0, 25, 37, 4.3),
-      createData("stock 3", 262, 16.0, 25, 24, 6.0),
-      createData("stock 4", 305, 3.7, 25, 67, 4.3),
-      createData("stock 5", 356, 16.0, 25, 49, 3.9)
-    ];
+    console.log("this state -----", this.state.transactions);
+    const stocks = this.state.transactions;
     return (
-      // <Card
-      //   style={{
-      //     float: "none",
-      //     width: "55%",
-      //     marginLeft: "auto",
-      //     marginRight: "auto"
-      //   }}
-      // >
-      //   {" "}
-      //   <Typography variant="display3" align="center">
-      //     my portfolio
-      //   </Typography>
-      //   <CardMedia
-      //     component="img"
-      //     height="50%"
-      //     image="/public/cloud.jpg"
-      //     title="Contemplative Reptile"
-      //     fullwidth="true"
-      //   />
-      //   <CardContent>
-      //     <Typography variant="display3">stocks stocks things</Typography>
-      //   </CardContent>
-      // </Card>
       <Paper
         styles={{
-          // width: "60%",
-          // position: "relative",
-          // marginTop: theme.spacing.unit * 3,
-          //padding: 20
           overflowX: "auto",
           maxWidth: 345,
           display: "flex",
@@ -122,13 +77,6 @@ class TransactionList extends React.Component {
           justifyContent: "space-around"
         }}
       >
-        <Typography variant="h4" style={{ color: "red", marginLeft: 20 }}>
-          <p>notes for next steps:</p>
-          <p>
-            <p>could also be a set of cards</p>
-            <p>could just be a list that allowed multiline</p>
-          </p>
-        </Typography>
         <Typography align="center" variant="h1">
           Transaction History
         </Typography>
@@ -154,24 +102,31 @@ class TransactionList extends React.Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map(row => {
-              return (
-                <TableRow key={row.id}>
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell numeric>{row.symbol}</TableCell>
-                  <TableCell numeric>{row.purchasedValue}</TableCell>
-                  <TableCell numeric>{row.currentValue}</TableCell>
-                  <TableCell numeric>{row.Totalowned}</TableCell>
-                  <TableCell numeric>{row.totalValue}</TableCell>
-                  <Button variant="raised" style={{ backgroundColor: "pink" }}>
-                    {" "}
-                    sell{" "}
-                  </Button>
-                </TableRow>
-              );
-            })}
+            {this.state.transactions
+              ? stocks.map(stock => {
+                  return (
+                    <TableRow key={stock.key}>
+                      <TableCell component="th" scope="row">
+                        {stock.name}
+                      </TableCell>
+                      <TableCell numeric>{stock.symbol}</TableCell>
+                      <TableCell numeric>
+                        ${stock.totalInvested}/{stock.sharePriceAtPurchase}
+                      </TableCell>
+                      <TableCell numeric>${stock.totalInvested}</TableCell>
+                      <TableCell numeric>{stock.numberOfShares}</TableCell>
+                      <TableCell numeric>{stock.transactionDate}</TableCell>
+                      <Button
+                        variant="raised"
+                        style={{ backgroundColor: "pink" }}
+                      >
+                        {" "}
+                        sell{" "}
+                      </Button>
+                    </TableRow>
+                  );
+                })
+              : null}
           </TableBody>
         </Table>
       </Paper>

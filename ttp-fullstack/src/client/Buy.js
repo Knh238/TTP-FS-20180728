@@ -12,12 +12,13 @@ import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
 import InputAdornment from "@material-ui/core/InputAdornment";
-
+import moment from "moment";
 export default class BuyForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       stock: "",
+      symbol: "",
       cost: 0,
       numberOfShares: 0,
       bill: 0,
@@ -31,7 +32,11 @@ export default class BuyForm extends Component {
     const self = this;
 
     const stockProp = this.props.location.state;
-    this.setState({ stock: stockProp.name, cost: stockProp.cost });
+    this.setState({
+      stock: stockProp.name,
+      cost: stockProp.cost,
+      symbol: stockProp.symbol
+    });
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         const currUser = user.uid;
@@ -54,63 +59,60 @@ export default class BuyForm extends Component {
   }
 
   handleSubmit() {
-    //add stock to portfolio
-    //reduce the avilable funds by amount caluclated
-    // const self = this;
-
     const stockToBuy = this.state.stock;
     const costAtPurchase = this.state.cost;
     const numSharesToBuy = this.state.numberOfShares;
-    const totalBill = this.state.bill;
+    const stockSymbol = this.state.symbol;
+    const totalBill = this.state.cost * this.state.numberOfShares;
     const currAvail = this.state.availableFunds - this.state.bill;
-    const dateBought = Date.now();
+    const dateBought = moment().format("MMM Do YY");
     const newBal = currAvail - totalBill;
 
-    const transactionHistory = [];
-    const purchase = {
+    const transactionHistory = {
       stockName: stockToBuy,
+      symbol: stockSymbol,
       SharePriceAtPurchase: costAtPurchase,
       numberOfShares: numSharesToBuy,
       totalInvested: totalBill,
       transactionDate: dateBought
     };
-    transactionHistory.push(purchase);
-    //push into an array and update totals of array if already in database
-    //would need to update
-    //num of shares owned
-    //amount invested
-    const currHoldings = [];
+
     const addToPortfolio = {
       stockName: stockToBuy,
+      symbol: stockSymbol,
       numberOfSharesOwned: numSharesToBuy,
       totalInvested: totalBill
     };
 
-    currHoldings.push(addToPortfolio);
     firebase.auth().onAuthStateChanged(async function(user) {
       if (user) {
-        // const newKey = await firebase
-        //   .database()
-        //   .ref(`users/${currUser}/groups/`)
-        //   .push().key;
-        // firebase
-        //   .database()
-        //   .ref(`users/${currUser}/groups/`)
-        //   .child(newKey)
-        //   .set(group);
         const currUser = user.uid;
+        const newKey = await firebase
+          .database()
+          .ref(`users/${currUser}/portfolio/CurrentHoldings`)
+          .push().key;
+        const newKey2 = await firebase
+          .database()
+          .ref(`users/${currUser}/portfolio/transactionHistory`)
+          .push().key;
         firebase
           .database()
           .ref(`users/${currUser}/portfolio/`)
           .child("cashBalance")
-          .set(newBal)
-          .then(() => console.log("set new blanace!---", newBal));
-        // transactionHistory: transactionHistory,
-        // currentHoldings: currHoldings
-        // );
+          .set(newBal);
+        firebase
+          .database()
+          .ref(`users/${currUser}/portfolio/transactionHistory`)
+          .child(newKey2)
+          .set(transactionHistory);
+        firebase
+          .database()
+          .ref(`users/${currUser}/portfolio/CurrentHoldings`)
+          .child(newKey)
+          .set(addToPortfolio);
       }
     });
-    //then redirect-props.history.push to home or some kind of recipet screen
+    this.props.history.push(`/`);
   }
 
   handleChange = prop => event => {
@@ -142,6 +144,9 @@ export default class BuyForm extends Component {
             >
               <Typography variant="display3" align="center">
                 {stock.name}
+              </Typography>
+              <Typography variant="display3" align="center">
+                {stock.symbol}
               </Typography>
             </div>
 
@@ -221,40 +226,3 @@ export default class BuyForm extends Component {
     );
   }
 }
-
-// BuyForm.propTypes = {
-//   classes: PropTypes.object.isRequired
-// };
-
-// export default withStyles(styles)(BuyForm);
-// portfolio:{
-//   cashBalance:500,000,
-//   estValueOfHoldings:0,
-//   transactionHistory:[],
-//   currHoldings:[]
-// }
-// {cashBalance:500,000,estValueOfHoldings:0,transactionHistory:[],currHoldings:[]}
-
-// const setUpPortfolio = () => {
-//   firebase.auth().onAuthStateChanged(async function(user) {
-//     if (user) {
-//       const currUser = "vYKiKAbLTWSgs3BGP20fu5nCf7K2";
-//       const port = {
-//         cashBalance: 500000,
-//         estValueOfHoldings: 0,
-//         transactionHistory: [],
-//         currHoldings: []
-//       };
-//       // const newKey = await firebase
-//       //   .database()
-//       //   .ref(`users/${currUser}/groups/`)
-//       //   .push().key;
-//       firebase
-//         .database()
-//         .ref(`users/${currUser}`)
-//         .child("portfolio")
-//         .set(port);
-//     }
-//   });
-// };
-// setUpPortfolio();

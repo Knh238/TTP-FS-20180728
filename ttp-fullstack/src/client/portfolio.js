@@ -15,6 +15,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
+import firebase from "../firebase";
 
 let id = 0;
 function createData(
@@ -39,59 +40,37 @@ function createData(
 class Portfolio extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = { stocks: [], currValue: 0 };
   }
 
   async componentWillMount() {
-    // return async dispatch => {
-    // try {
-    //   const { data } = await axios.get(
-    //     "https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb,tsla&types=quote,news,chart&range=1m&last=5"
-    //   );
-    //   console.log("data", data);
-    //   this.setState(data.AAPL);
-    // } catch (err) {
-    //   console.error(err);
-    // }
+    const self = this;
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        const currUser = user.uid;
+        var ref = firebase
+          .database()
+          .ref(`users/${currUser}/portfolio/CurrentHoldings`);
+        ref.on("value", function(snapshot) {
+          let currPortfolio = snapshot.val();
+          const holdings = [];
+          for (let key in currPortfolio) {
+            holdings.push(currPortfolio[key]);
+          }
+          self.setState({
+            stocks: holdings
+          });
+        });
+      }
+    });
   }
   render() {
-    const rows = [
-      createData("stock 1", 159, 6.0, 25, 24, 4.0),
-      createData("stock 2", 237, 9.0, 25, 37, 4.3),
-      createData("stock 3", 262, 16.0, 25, 24, 6.0),
-      createData("stock 4", 305, 3.7, 25, 67, 4.3),
-      createData("stock 5", 356, 16.0, 25, 49, 3.9)
-    ];
+    console.log("this state -----", this.state.stocks);
+    const stocks = this.state.stocks;
+
     return (
-      // <Card
-      //   style={{
-      //     float: "none",
-      //     width: "55%",
-      //     marginLeft: "auto",
-      //     marginRight: "auto"
-      //   }}
-      // >
-      //   {" "}
-      //   <Typography variant="display3" align="center">
-      //     my portfolio
-      //   </Typography>
-      //   <CardMedia
-      //     component="img"
-      //     height="50%"
-      //     image="/public/cloud.jpg"
-      //     title="Contemplative Reptile"
-      //     fullwidth="true"
-      //   />
-      //   <CardContent>
-      //     <Typography variant="display3">stocks stocks things</Typography>
-      //   </CardContent>
-      // </Card>
       <Paper
         styles={{
-          // width: "60%",
-          // position: "relative",
-          // marginTop: theme.spacing.unit * 3,
-          //padding: 20
           overflowX: "auto",
           maxWidth: 345,
           display: "flex",
@@ -105,7 +84,8 @@ class Portfolio extends React.Component {
         </Typography>
         <Table
           styles={{
-            padding: 20
+            padding: 20,
+            marginLeft: "20%"
             // minWidth: 600
           }}
         >
@@ -116,73 +96,48 @@ class Portfolio extends React.Component {
             }}
           >
             <TableRow>
-              <TableCell string>My portfolio</TableCell>
+              <TableCell string>Stock Name </TableCell>
               <TableCell numeric>Symbol</TableCell>
-              <TableCell numeric>purchase Value </TableCell>
+              <TableCell numeric>Total Invested</TableCell>
               <TableCell numeric>Current Value</TableCell>
-              <TableCell numeric>Total Owened</TableCell>
-              <TableCell numeric>Total Value</TableCell>
+              <TableCell numeric>Total Owned</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map(row => {
-              return (
-                <TableRow key={row.id}>
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell numeric>{row.symbol}</TableCell>
-                  <TableCell numeric>{row.purchasedValue}</TableCell>
-                  <TableCell numeric>{row.currentValue}</TableCell>
-                  <TableCell numeric>{row.Totalowned}</TableCell>
-                  <TableCell numeric>{row.totalValue}</TableCell>
-                  <Button variant="raised" style={{ backgroundColor: "pink" }}>
-                    {" "}
-                    sell{" "}
-                  </Button>
-                </TableRow>
-              );
-            })}
+            {this.state.stocks
+              ? this.state.stocks.map(stock => {
+                  return (
+                    <TableRow key={stock.key}>
+                      <TableCell component="th" scope="row">
+                        {stock.stockName}
+                      </TableCell>
+                      <TableCell>{stock.symbol}</TableCell>
+                      <TableCell numeric>${stock.totalInvested}</TableCell>
+                      <TableCell numeric>
+                        $ {stock.totalInvested}/{stock.numberOfSharesOwned}
+                      </TableCell>
+                      <TableCell numeric>{stock.numberOfSharesOwned}</TableCell>
+                      <Button
+                        variant="raised"
+                        style={{ backgroundColor: "pink" }}
+                      >
+                        {" "}
+                        sell{" "}
+                      </Button>
+                    </TableRow>
+                  );
+                })
+              : null}
           </TableBody>
         </Table>
-        <Typography variant="h4" style={{ color: "red", marginLeft: 20 }}>
-          <p>notes for next steps:</p>
-          <p>
-            <p>1.on click sell would </p>
-            <p>
-              --render a form(diff component) to sell this particular stock.
-            </p>
-            <p>
-              --you'd choose numebr of shares to unload and the estimated total
-              would be calulated. then evrything would update{" "}
-            </p>
-          </p>
-          <p>2.actually get real portfolio info from database</p>
-          <p>2 A .make text display red or green based on increase</p>
-          <p>3.maybe add a graph of history/value here or elsewhere</p>
-        </Typography>
+        <div style={{ marginTop: 20 }}>
+          <Typography variant="display3" align="center" textColor="navy">
+            Total Est. Value of Current Holdings: ${this.state.currValue}
+          </Typography>
+        </div>
       </Paper>
     );
   }
 }
 
 export default connect()(Portfolio);
-
-// {this.state.quote.change > 0 ? (
-//   <Typography
-//     style={{ color: "green" }}
-//     variant="display3"
-//     align="center"
-//   >
-//     {this.state.quote.change}
-//   </Typography>
-// ) : (
-//   <Typography
-//     style={{ color: "red" }}
-//     variant="display3"
-//     align="center"
-//   >
-//     {this.state.quote.change}
-//   </Typography>
-// )}
-// }
