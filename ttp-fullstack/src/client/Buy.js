@@ -17,175 +17,204 @@ export default class BuyForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      members: [],
-      projectId: "",
-      assignMember: ""
+      stock: "",
+      cost: 0,
+      numberOfShares: 0,
+      bill: 0,
+      availableFunds: 0
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCalc = this.handleCalc.bind(this);
   }
 
   componentDidMount() {
     const self = this;
-    // const projectKey = this.props.projects[0].key;
-    // const projMembers = this.props.projects[0].members;
-    // self.setState({ projectId: projectKey, members: projMembers });
-    //available funds
+
+    const stockProp = this.props.location.state;
+    this.setState({ stock: stockProp.name, cost: stockProp.cost });
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        const currUser = user.uid;
+        var ref = firebase.database().ref(`users/${currUser}/portfolio`);
+        ref.on("value", function(snapshot) {
+          let portfolioInfo = snapshot.val();
+
+          self.setState({
+            availableFunds: portfolioInfo.cashBalance
+          });
+        });
+      }
+    });
+  }
+
+  handleCalc() {
+    const subTotal = this.state.cost * this.state.numberOfShares;
+    console.log("subtotal in handlecal is---- ", subTotal);
+    this.setState({ bill: subTotal });
   }
 
   handleSubmit() {
-    const self = this;
-
     //add stock to portfolio
     //reduce the avilable funds by amount caluclated
+    // const self = this;
 
-    // const assigned = this.state.assignMember;
-    // const projectId = this.state.projectId;
-    // const content = this.state.todo;
-    // const newKey = firebase
-    //   .database()
-    //   .ref("tasks")
-    //   .push().key;
-    // const ref = firebase.database().ref("users");
-    // ref.on("value", function(snapshot) {
-    //   const users = snapshot.val();
-    //   let task;
-    //   for (var key in users) {
-    //     if (users[key].email === assigned) {
-    //       task = {
-    //         projectId,
-    //         assigned: users[key].displayName,
-    //         completed: false,
-    //         content
-    //       };
-    //     }
-    //   }
-    //   firebase
-    //     .database()
-    //     .ref("tasks")
-    //     .child(newKey)
-    //     .set(task);
-    //   self.setState({
-    //     todo: "",
-    //     assignMember: ""
-    //   });
-    //});
+    const stockToBuy = this.state.stock;
+    const costAtPurchase = this.state.cost;
+    const numSharesToBuy = this.state.numberOfShares;
+    const totalBill = this.state.bill;
+    const currAvail = this.state.availableFunds - this.state.bill;
+    const dateBought = Date.now();
+    const newBal = currAvail - totalBill;
+
+    const transactionHistory = [];
+    const purchase = {
+      stockName: stockToBuy,
+      SharePriceAtPurchase: costAtPurchase,
+      numberOfShares: numSharesToBuy,
+      totalInvested: totalBill,
+      transactionDate: dateBought
+    };
+    transactionHistory.push(purchase);
+    //push into an array and update totals of array if already in database
+    //would need to update
+    //num of shares owned
+    //amount invested
+    const currHoldings = [];
+    const addToPortfolio = {
+      stockName: stockToBuy,
+      numberOfSharesOwned: numSharesToBuy,
+      totalInvested: totalBill
+    };
+
+    currHoldings.push(addToPortfolio);
+    firebase.auth().onAuthStateChanged(async function(user) {
+      if (user) {
+        // const newKey = await firebase
+        //   .database()
+        //   .ref(`users/${currUser}/groups/`)
+        //   .push().key;
+        // firebase
+        //   .database()
+        //   .ref(`users/${currUser}/groups/`)
+        //   .child(newKey)
+        //   .set(group);
+        const currUser = user.uid;
+        firebase
+          .database()
+          .ref(`users/${currUser}/portfolio/`)
+          .child("cashBalance")
+          .set(newBal)
+          .then(() => console.log("set new blanace!---", newBal));
+        // transactionHistory: transactionHistory,
+        // currentHoldings: currHoldings
+        // );
+      }
+    });
+    //then redirect-props.history.push to home or some kind of recipet screen
   }
+
   handleChange = prop => event => {
     this.setState({ [prop]: event.target.value });
   };
 
   render() {
-    // const members = this.state.members;
-
-    console.log(this.state);
+    const stock = this.props.location.state;
+    console.log("this state in biy is ------------", this.state);
     return (
       <div>
-        {/* <Card> */}
-        <Typography variant="display1"> Purchase form</Typography>
-        {/* </Card> */}
+        <Typography
+          variant="display4"
+          style={{ backgroundColor: "#29B6F6", marginTop: 10 }}
+          align="center"
+        >
+          {" "}
+          Purchase form
+        </Typography>
+
         <Card style={{ margin: 10 }}>
           <FormGroup style={{ padding: 10 }}>
-            <div style={{ marginBottom: 10 }}>
-              <InputLabel>Stock Symbol</InputLabel>
-              <Input
-                varient="outlined"
-                margin="normal"
-                //onChange={event => this.setState({ todo: event.target.value })}
-                //   value={this.state.todo}
-              />
-              <TextField
-                id="outlined-simple-start-adornment"
-                //   className={classNames(classes.margin, classes.textField)}
-                variant="outlined"
-                label="With outlined TextField"
-                InputProps={{
-                  startAdornment: <InputAdornment position="start" />
-                }}
-              />
+            <div
+              style={{
+                marginBottom: 10,
+                backgroundColor: "#80DEEA",
+                padding: 20
+              }}
+            >
+              <Typography variant="display3" align="center">
+                {stock.name}
+              </Typography>
             </div>
 
-            <div style={{ marginBottom: 10 }}>
-              <InputLabel>Number of shares </InputLabel>
+            <div style={{ marginBottom: 10, marginTop: 10, padding: 20 }}>
+              <Typography variant="display2" style={{ color: "pink" }}>
+                {stock.cost}
+              </Typography>
+
               <TextField
+                size="large"
                 id="outlined-number"
-                label="Number with drop down"
-                //   value={this.state.age}
-                //   onChange={this.handleChange("age")}
+                label="Number of shares"
+                value={this.state.numberOfShares}
+                onChange={this.handleChange("numberOfShares")}
                 type="number"
-                //   className={classes.textField}
                 InputLabelProps={{
                   shrink: true
                 }}
                 margin="normal"
                 variant="outlined"
               />
-              <TextField
-                id="outlined-adornment"
-                //   className={classNames(classes.margin, classes.textField)}
-                variant="outlined"
-                label="Number"
-                value={this.state.numShares}
-                onChange={this.handleChange("amount")}
-                InputProps={{
-                  startAdornment: <InputAdornment position="start" />
+            </div>
+            <div style={{ padding: 20 }}>
+              <Button
+                variant="contained"
+                size="medium"
+                style={{
+                  background: "#00ACC1",
+                  borderRadius: 5,
+                  border: 0,
+                  color: "white",
+                  height: 48,
+                  width: "15%",
+                  padding: "0 30px",
+                  boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+                  fontSize: 30
                 }}
-              />
-              {/* <Select
-              fullWidth
-            //   onChange={event =>
-            //     this.setState({ assignMember: event.target.value })
-            //   }
-            //   value={this.state.assignMember}
-            > */}
-              {/* {members ? (
-                members.map(member => (
-                  <MenuItem key={member} value={member}>
-                    {member}
-                  </MenuItem>
-                ))
-              ) : (
-                <MenuItem>No members in this project.</MenuItem>
-              )} */}
-              {/* </Select> */}
+                onClick={() => this.handleCalc()}
+              >
+                calculate cost{" "}
+              </Button>
+
+              <Typography variant="display1" style={{ padding: 10 }}>
+                {" "}
+                Estimated Cost : ${this.state.bill}
+              </Typography>
+              <Typography
+                variant="display1"
+                style={{ padding: 10, marginBottom: 20 }}
+              >
+                {" "}
+                Available Funds : ${this.state.availableFunds}
+              </Typography>
+
+              <Button
+                variant="contained"
+                size="medium"
+                onClick={() => this.handleSubmit()}
+                style={{
+                  background: "#FF4081",
+                  borderRadius: 5,
+                  border: 0,
+                  color: "white",
+                  height: 48,
+                  width: "15%",
+                  padding: "0 30px",
+                  boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)",
+                  fontSize: 35
+                }}
+              >
+                Buy
+              </Button>
             </div>
-            <Button
-              variant="contained"
-              size="medium"
-              style={{
-                background: "#00ACC1",
-                borderRadius: 3,
-                border: 0,
-                color: "white",
-                height: 48,
-                width: "15%",
-                padding: "0 30px",
-                boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)"
-              }}
-              onClick={() => this.handleSubmit()}
-            >
-              calculate cost{" "}
-            </Button>
-            <div>
-              <Typography variant="display1"> estimated cost: </Typography>
-              <Typography variant="display1"> available funds: </Typography>
-            </div>
-            <Button
-              variant="contained"
-              size="medium"
-              onClick={() => this.handleSubmit()}
-              style={{
-                background: "#FF5252",
-                borderRadius: 3,
-                border: 0,
-                color: "white",
-                height: 48,
-                width: "15%",
-                padding: "0 30px",
-                boxShadow: "0 3px 5px 2px rgba(255, 105, 135, .3)"
-              }}
-            >
-              Buy!
-            </Button>
           </FormGroup>
         </Card>
       </div>
@@ -198,3 +227,34 @@ export default class BuyForm extends Component {
 // };
 
 // export default withStyles(styles)(BuyForm);
+// portfolio:{
+//   cashBalance:500,000,
+//   estValueOfHoldings:0,
+//   transactionHistory:[],
+//   currHoldings:[]
+// }
+// {cashBalance:500,000,estValueOfHoldings:0,transactionHistory:[],currHoldings:[]}
+
+// const setUpPortfolio = () => {
+//   firebase.auth().onAuthStateChanged(async function(user) {
+//     if (user) {
+//       const currUser = "vYKiKAbLTWSgs3BGP20fu5nCf7K2";
+//       const port = {
+//         cashBalance: 500000,
+//         estValueOfHoldings: 0,
+//         transactionHistory: [],
+//         currHoldings: []
+//       };
+//       // const newKey = await firebase
+//       //   .database()
+//       //   .ref(`users/${currUser}/groups/`)
+//       //   .push().key;
+//       firebase
+//         .database()
+//         .ref(`users/${currUser}`)
+//         .child("portfolio")
+//         .set(port);
+//     }
+//   });
+// };
+// setUpPortfolio();

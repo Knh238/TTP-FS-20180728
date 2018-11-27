@@ -198,11 +198,7 @@ class ClippedDrawer extends React.Component {
                 state: this.state.searchStock
               }}
             >
-              <SearchIcon
-                onClick={() =>
-                  console.log("state search stock is", this.state.searchStock)
-                }
-              />
+              <SearchIcon />
             </IconButton>
 
             <div style={{ marginLeft: "20%" }}>

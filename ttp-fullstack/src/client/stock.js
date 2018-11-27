@@ -10,7 +10,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Paper from "@material-ui/core/Paper";
-
+import { Link } from "react-router-dom";
 import { colors } from "@material-ui/core";
 import axios from "axios";
 
@@ -32,9 +32,7 @@ class Stock extends React.Component {
     this.state = {};
   }
   async componentWillMount() {
-    // return async dispatch => {
     const symbol = this.props.location.state;
-    //GET /stock/{symbol}/batch
     try {
       const { data } = await axios.get(
         `https://api.iextrading.com/1.0/stock/${symbol}/batch?types=quote,news,chart&range=1m&last=1`
@@ -51,51 +49,49 @@ class Stock extends React.Component {
 
     return (
       <div>
-        <Card
+        <Typography
+          variant="display4"
+          style={{ backgroundColor: "#29B6F6" }}
+          align="center"
+        >
+          Stock Info
+        </Typography>
+        {/* <Card
           style={{
             float: "none",
             width: "20%",
+            height: "80%",
             marginLeft: "auto",
             marginRight: "auto"
           }}
         >
           {" "}
-          <Typography variant="display3" align="center">
+          <Typography
+            variant="display4"
+            style={{ backgroundColor: "#29B6F6" }}
+            align="center"
+          >
             Stock Info
-          </Typography>
-          {/* <CardMedia
+          </Typography> */}
+        {/* <CardMedia
             component="img"
             height="20%"
             image="https://cdn141.picsart.com/271471483023201.png?c480x480"
             title="cat money"
             fullwidth="true"
           /> */}
-          {/* {this.state.quote ? (
-            <CardContent>
-              <Typography variant="display3">
-                {this.state.quote.latestPrice}
-              </Typography>
-            </CardContent>
-          ) : null} */}
-        </Card>
-        {/* <Card
-          style={{
-            float: "none",
-            width: "50%",
-            marginLeft: "auto",
-            marginRight: "auto"
-          }}
-        > */}
-        {/* <div> */}
+        {/* </Card> */}
+
         {this.state.quote ? (
           <Paper
             style={{
               marginLeft: "15%",
               backgroundColor: "white",
-              width: "65%"
+              width: "65%",
+              height: "50%"
             }}
           >
-            <Card style={{ backgroundColor: "#29B6F6" }}>
+            <Card style={{ backgroundColor: "#80DEEA" }}>
               <Typography variant="display3" align="center">
                 {this.state.quote.companyName}
               </Typography>
@@ -104,13 +100,34 @@ class Stock extends React.Component {
               </Typography>
             </Card>
             <Card style={{ backgroundColor: "#E8EAF6" }}>
+              <Typography
+                variant="display2"
+                style={{ color: "black" }}
+                align="center"
+              >
+                Current Price per Share:
+              </Typography>
+              <Typography
+                variant="display4"
+                style={{ color: "black" }}
+                align="center"
+              >
+                ${this.state.quote.latestPrice}
+              </Typography>
+              <Typography
+                variant="display2"
+                style={{ color: "grey" }}
+                align="center"
+              >
+                as of : {this.state.quote.latestTime}
+              </Typography>
               {this.state.quote.change > 0 ? (
                 <Typography
                   style={{ color: "green" }}
                   variant="display3"
                   align="center"
                 >
-                  {this.state.quote.change}
+                  {this.state.quote.change}(%{this.state.quote.changePercent})
                 </Typography>
               ) : (
                 <Typography
@@ -118,34 +135,68 @@ class Stock extends React.Component {
                   variant="display3"
                   align="center"
                 >
-                  {this.state.quote.change}
+                  {this.state.quote.change}(%{this.state.quote.changePercent})
                 </Typography>
               )}
               }
-              <Typography
-                style={{ color: "black" }}
-                variant="display2"
-                align="center"
-              >
-                {"\n"}%{this.state.quote.changePercent}
-              </Typography>
               <Typography variant="display2" style={{ color: "black" }}>
-                {this.state.quote.latestPrice}@{this.state.quote.latestTime}
+                Previous Close:
               </Typography>
-              <Typography variant="display2" style={{ color: "black" }}>
-                previous {this.state.quote.previousClose}
+              <Typography variant="display2" style={{ color: "grey" }}>
+                ${this.state.quote.previousClose}
               </Typography>
             </Card>
             <Card style={{ backgroundColor: "#E8EAF6" }}>
-              <Typography variant="display2" style={{ color: "black" }}>
-                historyical info
+              <Typography
+                variant="display2"
+                style={{ color: "navy" }}
+                align="right"
+              >
+                Highs & Lows For The Year:
               </Typography>
-              <Typography variant="display2" style={{ color: "black" }}>
-                highest:{this.state.quote.week52High}
+              <Typography
+                variant="display2"
+                style={{ color: "grey" }}
+                align="right"
+              >
+                Highest : {this.state.quote.week52High}
               </Typography>
-              <Typography variant="display2" style={{ color: "black" }}>
-                lowest:{this.state.quote.week52Low}
+              <Typography
+                variant="display2"
+                style={{ color: "grey" }}
+                align="right"
+              >
+                Lowest : {this.state.quote.week52Low}
               </Typography>
+              <Card align="center">
+                <Link
+                  to={{
+                    pathname: "/Buy",
+                    state: {
+                      name: this.state.quote.companyName,
+                      cost: this.state.quote.latestPrice
+                    }
+                  }}
+                >
+                  <Button
+                    variant="text"
+                    label="buy"
+                    style={{
+                      backgroundColor: "#3F51B5",
+                      marginBottom: 10,
+                      marginTop: 10,
+                      width: "30%",
+                      height: "20%",
+
+                      alignSelf: "center"
+                    }}
+                    labelStyle={{ color: "pink", fontSize: 30 }}
+                  >
+                    {" "}
+                    Buy{" "}
+                  </Button>
+                </Link>
+              </Card>
             </Card>
           </Paper>
         ) : null}
@@ -155,10 +206,3 @@ class Stock extends React.Component {
 }
 
 export default connect()(Stock);
-
-// var d3 = require("d3"),
-//     jsdom = require("jsdom");
-
-// var document = jsdom.jsdom(),
-//     svg = d3.select(document.body).append("svg");
-//     import * as d3 from "d3";
