@@ -37,17 +37,25 @@ class Home extends React.Component {
         <div style={{ backgroundColor: "#80DEEA" }}>
           <Button
             variant="contained"
-            color="primary"
             title="login"
+            text="login"
             style={{
               marginLeft: "25%",
               height: 200,
               width: 200,
               borderRadius: 160,
-              fontSize: 30
+              fontSize: 30,
+              backgroundColor: "#03A9F4"
+            }}
+            textStyle={{ color: "white" }}
+            component={Link}
+            to={{
+              pathname: "/login"
             }}
           >
-            <Link to="/login">Log in</Link>
+            <Typography variant="display1" align="center">
+              Login
+            </Typography>
           </Button>
 
           <Button
@@ -57,10 +65,19 @@ class Home extends React.Component {
               height: 200,
               width: 200,
               borderRadius: 160,
-              fontSize: 30
+              fontSize: 30,
+              backgroundColor: "#00BCD4",
+              color: "white"
             }}
+            component={Link}
+            to={{
+              pathname: "/signup"
+            }}
+            title="sign up"
           >
-            <Link to="/signup">sign-up</Link>
+            <Typography variant="display1" align="center">
+              Sign up
+            </Typography>
           </Button>
         </div>
         <Card
@@ -73,11 +90,11 @@ class Home extends React.Component {
         >
           <CardMedia
             component="img"
-            height="30%"
+            // height={600}
             //image="https://cdn163.picsart.com/223256630016202.jpg?c480x480"
             image="https://cdn141.picsart.com/271471483023201.png?c480x480"
             title="home"
-            width="30%"
+            // width={400}
           />
         </Card>
       </div>
