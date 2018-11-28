@@ -22,7 +22,8 @@ export default class BuyForm extends Component {
       cost: 0,
       numberOfShares: 0,
       bill: 0,
-      availableFunds: 0
+      availableFunds: 0,
+      estPortfolioVal: 0
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleCalc = this.handleCalc.bind(this);
@@ -45,7 +46,8 @@ export default class BuyForm extends Component {
           let portfolioInfo = snapshot.val();
 
           self.setState({
-            availableFunds: portfolioInfo.cashBalance
+            availableFunds: portfolioInfo.cashBalance,
+            estPortfolioVal: portfolioInfo.estValueOfHoldings
           });
         });
       }
@@ -67,6 +69,7 @@ export default class BuyForm extends Component {
     const currAvail = this.state.availableFunds - this.state.bill;
     const dateBought = moment().format("MMM Do YY");
     const newBal = currAvail - totalBill;
+    const newValOfAssets = this.state.estPortfolioVal + totalBill;
 
     const transactionHistory = {
       stockName: stockToBuy,
@@ -100,6 +103,11 @@ export default class BuyForm extends Component {
           .ref(`users/${currUser}/portfolio/`)
           .child("cashBalance")
           .set(newBal);
+        firebase
+          .database()
+          .ref(`users/${currUser}/portfolio/`)
+          .child("estValueOfHoldings")
+          .set(newValOfAssets);
         firebase
           .database()
           .ref(`users/${currUser}/portfolio/transactionHistory`)
@@ -152,7 +160,7 @@ export default class BuyForm extends Component {
 
             <div style={{ marginBottom: 10, marginTop: 10, padding: 20 }}>
               <Typography variant="display2" style={{ color: "pink" }}>
-                {stock.cost}
+                ${stock.cost}
               </Typography>
 
               <TextField

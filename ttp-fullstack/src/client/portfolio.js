@@ -48,17 +48,17 @@ class Portfolio extends React.Component {
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         const currUser = user.uid;
-        var ref = firebase
-          .database()
-          .ref(`users/${currUser}/portfolio/CurrentHoldings`);
+        var ref = firebase.database().ref(`users/${currUser}/portfolio/`);
         ref.on("value", function(snapshot) {
           let currPortfolio = snapshot.val();
           const holdings = [];
-          for (let key in currPortfolio) {
-            holdings.push(currPortfolio[key]);
+          const estVal = currPortfolio.estValueOfHoldings;
+          for (let key in currPortfolio.CurrentHoldings) {
+            holdings.push(currPortfolio.CurrentHoldings[key]);
           }
           self.setState({
-            stocks: holdings
+            stocks: holdings,
+            currValue: estVal
           });
         });
       }

@@ -93,7 +93,8 @@ class TransactionList extends React.Component {
             }}
           >
             <TableRow>
-              <TableCell string>My portfolio</TableCell>
+              <TableCell string>date</TableCell>
+              <TableCell numeric>Stock Name</TableCell>
               <TableCell numeric>Symbol</TableCell>
               <TableCell numeric>purchase Value </TableCell>
               <TableCell numeric>Current Value</TableCell>
@@ -106,23 +107,19 @@ class TransactionList extends React.Component {
               ? stocks.map(stock => {
                   return (
                     <TableRow key={stock.key}>
+                      <TableCell numeric>{stock.transactionDate}</TableCell>
                       <TableCell component="th" scope="row">
-                        {stock.name}
+                        {stock.stockName}
                       </TableCell>
                       <TableCell numeric>{stock.symbol}</TableCell>
                       <TableCell numeric>
-                        ${stock.totalInvested}/{stock.sharePriceAtPurchase}
+                        ${stock.SharePriceAtPurchase}
                       </TableCell>
-                      <TableCell numeric>${stock.totalInvested}</TableCell>
+                      <TableCell numeric>
+                        ${stock.SharePriceAtPurchase}
+                      </TableCell>
                       <TableCell numeric>{stock.numberOfShares}</TableCell>
-                      <TableCell numeric>{stock.transactionDate}</TableCell>
-                      <Button
-                        variant="raised"
-                        style={{ backgroundColor: "pink" }}
-                      >
-                        {" "}
-                        sell{" "}
-                      </Button>
+                      <TableCell numeric>${stock.totalInvested}</TableCell>
                     </TableRow>
                   );
                 })

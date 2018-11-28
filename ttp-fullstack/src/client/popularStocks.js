@@ -11,6 +11,7 @@ import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const styles = {
   card: {
@@ -33,16 +34,24 @@ class PopularStocks extends React.Component {
     // return async dispatch => {
     try {
       const { data } = await axios.get(
-        "https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb,tsla&types=quote,news,chart&range=1m&last=5"
+        "https://api.iextrading.com/1.0/stock/market/batch?symbols=aapl,fb,tsla,amzn&types=quote,news,chart&range=1m&last=5"
       );
+      const dataArr = [];
       console.log("data", data);
-      this.setState(data.AAPL);
+      dataArr.push(data.AMZN);
+      dataArr.push(data.FB);
+      dataArr.push(data.TSLA);
+      dataArr.push(data.AAPL);
+      this.setState({
+        stocks: dataArr
+      });
     } catch (err) {
       console.error(err);
     }
   }
 
   render() {
+    console.log("this state in pop stocks", this.state.stocks);
     return (
       <div>
         <Card
@@ -58,86 +67,128 @@ class PopularStocks extends React.Component {
           <Typography variant="display3" align="center">
             PopularStocks
           </Typography>
-          <CardMedia
-            style={{ display: "flex" }}
-            component="img"
-            // height="40%"
-            image="https://cdn140.picsart.com/279049216003201.jpg?c480x480"
-            title="flames"
-            // fullwidth="true"
-          />
-          <CardContent>
-            <Typography variant="display3">
-              Because girl, your stock is ON FI-YA!
-            </Typography>
-          </CardContent>
         </Card>
-        {this.state.quote ? (
-          <Paper
-            style={{
-              marginLeft: "5%",
-              backgroundColor: "white"
-            }}
-          >
-            <Card style={{ backgroundColor: "#BBDEFB" }}>
-              <Typography variant="display3" align="center">
-                {this.state.quote.symbol}
-                {this.state.quote.companyName}
-              </Typography>
-            </Card>
-            <Card style={{ backgroundColor: "#E8EAF6" }}>
-              <Typography
-                style={{ color: "black" }}
-                variant="display3"
-                align="center"
+        {this.state.stocks
+          ? this.state.stocks.map(stock => (
+              <Paper
+                style={{
+                  marginLeft: "15%",
+                  backgroundColor: "white",
+                  width: "65%",
+                  height: "50%"
+                }}
               >
-                change: {this.state.quote.change}
-              </Typography>
-              {this.state.quote.change > 0 ? (
-                <Typography
-                  style={{ color: "green" }}
-                  variant="display3"
-                  align="center"
-                >
-                  {this.state.quote.change}
-                </Typography>
-              ) : (
-                <Typography
-                  style={{ color: "red" }}
-                  variant="display3"
-                  align="center"
-                >
-                  {this.state.quote.change}
-                </Typography>
-              )}
-              }
-              <Typography
-                style={{ color: "black" }}
-                variant="display3"
-                align="center"
-              >
-                {"\n"}%{this.state.quote.changePercent}
-              </Typography>
-              <Typography variant="display2" style={{ color: "black" }}>
-                {this.state.quote.latestPrice}@{this.state.quote.latestTime}
-              </Typography>
-              <Typography variant="display2" style={{ color: "black" }}>
-                previous {this.state.quote.previousClose}
-              </Typography>
-            </Card>
-            <Card style={{ backgroundColor: "#E8EAF6" }}>
-              <Typography variant="display2" style={{ color: "black" }}>
-                historyical info
-              </Typography>
-              <Typography variant="display2" style={{ color: "black" }}>
-                highest:{this.state.quote.week52High}
-              </Typography>
-              <Typography variant="display2" style={{ color: "black" }}>
-                lowest:{this.state.quote.week52Low}
-              </Typography>
-            </Card>
-          </Paper>
-        ) : null}
+                <Card style={{ backgroundColor: "#80DEEA" }}>
+                  <Typography variant="display3" align="center">
+                    {stock.quote.companyName}
+                  </Typography>
+                  <Typography variant="display2" align="center">
+                    Symbol: {stock.quote.symbol}
+                  </Typography>
+                </Card>
+                <Card style={{ backgroundColor: "#E8EAF6" }}>
+                  <Typography
+                    variant="display2"
+                    style={{ color: "black" }}
+                    align="center"
+                  >
+                    Current Price per Share:
+                  </Typography>
+                  <Typography
+                    variant="display4"
+                    style={{ color: "black" }}
+                    align="center"
+                  >
+                    ${stock.quote.latestPrice}
+                  </Typography>
+                  <Typography
+                    variant="display2"
+                    style={{ color: "grey" }}
+                    align="center"
+                  >
+                    as of : {stock.quote.latestTime}
+                  </Typography>
+                  {stock.quote.change > 0 ? (
+                    <Typography
+                      style={{ color: "green" }}
+                      variant="display3"
+                      align="center"
+                    >
+                      {stock.quote.change}(%{stock.quote.changePercent})
+                    </Typography>
+                  ) : (
+                    <Typography
+                      style={{ color: "red" }}
+                      variant="display3"
+                      align="center"
+                    >
+                      {stock.quote.change}(%{stock.quote.changePercent})
+                    </Typography>
+                  )}
+                  }
+                  <Typography variant="display2" style={{ color: "black" }}>
+                    Previous Close:
+                  </Typography>
+                  <Typography variant="display2" style={{ color: "grey" }}>
+                    ${stock.quote.previousClose}
+                  </Typography>
+                </Card>
+                <Card style={{ backgroundColor: "#E8EAF6" }}>
+                  <Typography
+                    variant="display2"
+                    style={{ color: "navy" }}
+                    align="right"
+                  >
+                    Highs & Lows For The Year:
+                  </Typography>
+                  <Typography
+                    variant="display2"
+                    style={{ color: "grey" }}
+                    align="right"
+                  >
+                    Highest : {stock.quote.week52High}
+                  </Typography>
+                  <Typography
+                    variant="display2"
+                    style={{ color: "grey" }}
+                    align="right"
+                  >
+                    Lowest : {stock.quote.week52Low}
+                  </Typography>
+                  <Card align="center">
+                    <Link
+                      to={{
+                        pathname: "/Buy",
+                        state: {
+                          name: stock.quote.companyName,
+                          cost: stock.quote.latestPrice,
+                          symbol: stock.quote.symbol
+                        }
+                      }}
+                    >
+                      <Button
+                        variant="text"
+                        label="buy"
+                        style={{
+                          backgroundColor: "#3F51B5",
+                          marginBottom: 10,
+                          marginTop: 10,
+                          width: "30%",
+                          height: "20%",
+
+                          alignSelf: "center"
+                        }}
+                        labelStyle={{ color: "pink", fontSize: 30 }}
+                      >
+                        {" "}
+                        Buy{" "}
+                      </Button>
+                    </Link>
+                  </Card>
+                </Card>
+              </Paper>
+            ))
+          : null}
       </div>
     );
   }

@@ -18,46 +18,33 @@ const styles = {
     flexWrap: "wrap",
     justifyContent: "space-around"
   }
-  // media: {
-  //   objectFit: "cover"
-  // }
 };
 
 class Home extends React.Component {
   render() {
     return (
-      <div>
+      <div style={{ backgroundColor: "#80DEEA" }}>
+        >
         <div>
-          <Card
-            style={{
-              width: "55%",
-              marginLeft: "auto",
-              marginRight: "auto",
-              marginBottom: 20,
-              backgroundColor: "#80DEEA"
-            }}
-          >
-            {" "}
-            <Typography variant="display4" align="center">
-              Welcome!
-            </Typography>
-            <Typography variant="display2" align="center">
-              You can search for stocks by symbol in search bar in upper
-              left-hand corner
-            </Typography>
-          </Card>
+          <Typography variant="display4" align="center">
+            Welcome!
+          </Typography>
+          <Typography variant="display2" align="center">
+            You can search for stocks by symbol in search bar in upper left-hand
+            corner
+          </Typography>
         </div>
-        <div>
+        <div style={{ backgroundColor: "#80DEEA" }}>
           <Button
-            size="large"
             variant="contained"
             color="primary"
             title="login"
             style={{
               marginLeft: "25%",
-              height: "50%",
-              width: "10%",
-              borderRadius: 5
+              height: 200,
+              width: 200,
+              borderRadius: 160,
+              fontSize: 30
             }}
           >
             <Link to="/login">Log in</Link>
@@ -65,7 +52,13 @@ class Home extends React.Component {
 
           <Button
             variant="contained"
-            style={{ marginLeft: "30%", height: "30%", width: "10%" }}
+            style={{
+              marginLeft: "30%",
+              height: 200,
+              width: 200,
+              borderRadius: 160,
+              fontSize: 30
+            }}
           >
             <Link to="/signup">sign-up</Link>
           </Button>

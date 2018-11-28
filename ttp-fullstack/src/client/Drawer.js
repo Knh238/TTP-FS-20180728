@@ -21,18 +21,15 @@ import ForumIcon from "@material-ui/icons/Forum";
 import WorkIcon from "@material-ui/icons/Work";
 import AccountIcon from "@material-ui/icons/AccountCircle";
 import IconButton from "@material-ui/core/IconButton";
-// import Typography from "@material-ui/core/Typography";
+
 import InputBase from "@material-ui/core/InputBase";
 import Button from "@material-ui/core/Button";
-//import Badge from "@material-ui/core/Badge";
-// import MenuItem from "@material-ui/core/MenuItem";
-// import Menu from "@material-ui/core/Menu";
+
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import Avatar from "@material-ui/core/Avatar";
-//import Tooltip from "@material-ui/core/Tooltip";
+
 import Icon from "@material-ui/core/Icon";
-// import { withStyles } from "@material-ui/core/styles";
-// import MenuIcon from "@material-ui/icons/Menu";
+
 import SearchIcon from "@material-ui/icons/Search";
 import firebase from "../firebase";
 
@@ -102,14 +99,12 @@ class ClippedDrawer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      // projects: [],
       user: {},
       login: null,
       searchStock: ""
     };
     this.logOut = this.logOut.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    //this.clickNav = this.clickNav.bind(this);
   }
 
   componentDidMount() {
@@ -117,31 +112,13 @@ class ClippedDrawer extends React.Component {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         self.setState({ user });
-        // const ref = firebase.database().ref("projects");
-        // ref.on("value", function(snapshot) {
-        //   let userProjects = [];
-        //   const projects = snapshot.val();
-        //   for (let key in projects) {
-        //     if (projects[key].members) {
-        //       const members = projects[key].members;
-        //       const name = projects[key].name;
-        //       const color = projects[key].color;
-        //       if (members.includes(user.email)) {
-        //         userProjects.push({ name, key, color });
-        //       }
-        //     }
-        //   }
-        //   self.setState({ projects: userProjects });
-        // });
       }
     });
   }
-  // clickNav(key) {
-  //   //this.props.setProject(key)
-  // }
+
   handleSubmit() {
     const self = this;
-    // const stock = this.state.eventName;
+
     self.setState({ searchSock: "" });
   }
 
@@ -242,7 +219,7 @@ class ClippedDrawer extends React.Component {
           </List>
           <Divider />
           <List>
-            <ListItem
+            {/* <ListItem
               button
               key={"my profile"}
               title="profile"
@@ -254,9 +231,9 @@ class ClippedDrawer extends React.Component {
                 <AccountIcon />
               </ListItemIcon>
               <ListItemText primary={"Profile"} />
-            </ListItem>
+            </ListItem> */}
 
-            <ListItem
+            {/* <ListItem
               button
               key={"Account Summary"}
               title="AccountSummary"
@@ -268,7 +245,7 @@ class ClippedDrawer extends React.Component {
                 <InsertChart />
               </ListItemIcon>
               <ListItemText primary={"Account Summary"} />
-            </ListItem>
+            </ListItem> */}
 
             <ListItem
               button
@@ -311,7 +288,6 @@ class ClippedDrawer extends React.Component {
                     <Icon>logout</Icon>
                   </Avatar>
                 </Link>
-                {/* </Tooltip> */}
               </ListItem>
             ) : null}
           </List>
