@@ -63,6 +63,18 @@ class Portfolio extends React.Component {
         });
       }
     });
+    // async componentWillMount() {
+    //   const symbol = this.props.location.state;
+    //   try {
+    //     const { data } = await axios.get(
+    //       `https://api.iextrading.com/1.0/stock/${symbol}/batch?types=quote,news,chart&range=1m&last=1`
+    //     );
+    //     console.log("data", data);
+    //     this.setState(data);
+    //   } catch (err) {
+    //     console.error(err);
+    //   }
+    // }
   }
   render() {
     console.log("this state -----", this.state.stocks);
@@ -99,8 +111,9 @@ class Portfolio extends React.Component {
               <TableCell string>Stock Name </TableCell>
               <TableCell numeric>Symbol</TableCell>
               <TableCell numeric>Total Invested</TableCell>
-              <TableCell numeric>Current Value</TableCell>
               <TableCell numeric>Total Owned</TableCell>
+              <TableCell numeric>Initial Price Per Share</TableCell>
+              <TableCell numeric>Current Value</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -112,9 +125,16 @@ class Portfolio extends React.Component {
                         {stock.stockName}
                       </TableCell>
                       <TableCell>{stock.symbol}</TableCell>
-                      <TableCell numeric>${stock.totalInvested}</TableCell>
                       <TableCell numeric>
-                        $ {stock.totalInvested}/{stock.numberOfSharesOwned}
+                        ${Math.round(`${stock.totalInvested}`)}
+                      </TableCell>
+                      <TableCell numeric>{stock.numberOfSharesOwned}</TableCell>
+                      <TableCell numeric>
+                        ${" "}
+                        {Math.round(
+                          `${stock.totalInvested}` /
+                            `${stock.numberOfSharesOwned}`
+                        )}
                       </TableCell>
                       <TableCell numeric>{stock.numberOfSharesOwned}</TableCell>
                       <Button
